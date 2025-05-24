@@ -47,7 +47,7 @@ export function Navbar() {
             asChild
             key={route.href}
             variant={pathname === route.href ? "default" : "ghost"}
-            className="rounded-full py-6 px-6 text-base"
+            className="rounded-full py-6 px-6 text-base border-none"
           >
             <Link href={route.href}>{route.title}</Link>
           </Button>
