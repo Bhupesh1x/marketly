@@ -24,6 +24,7 @@ async function layout({ children }: Props) {
         exists: false,
       },
     },
+    sort: "name",
   });
 
   const formattedData = data?.docs?.map((doc) => ({

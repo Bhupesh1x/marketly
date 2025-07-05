@@ -33,7 +33,7 @@ export function SubcategoryMenu({ category, position, isOpen }: Props) {
             <Link
               key={category.slug}
               href="/"
-              className="w-full p-2 text-left flex items-center justify-between hover:underline font-medium"
+              className="w-full p-2 text-left flex items-center justify-between hover:underline font-medium hover:bg-black hover:text-white  transition"
             >
               {category?.name}
             </Link>
