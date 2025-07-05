@@ -2,22 +2,22 @@
 
 import { ListFilterIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { Category } from "@/payload-types";
+import { useTRPC } from "@/trpc/client";
 
 import { Button } from "../ui/button";
 
 import { CategorySidebar } from "./CategorySidebar";
 import { CategoryDropdown } from "./CategoryDropdown";
 
-interface Props {
-  data: Category[];
-}
-
-export function Categories({ data }: Props) {
+export function Categories() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const viewAllRef = useRef<HTMLDivElement | null>(null);
+
+  const trpc = useTRPC();
+  const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
   const [visibleCount, setVisibleCount] = useState(data?.length);
   const [isAnyHovered, setIsAnyHovered] = useState(false);
@@ -66,17 +66,13 @@ export function Categories({ data }: Props) {
 
   return (
     <div className="relative w-full">
-      <CategorySidebar
-        open={isSidebarOpen}
-        onOpenChange={setIsSidebarOpen}
-        data={data}
-      />
+      <CategorySidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
       <div
         ref={measureRef}
         className="absoulte opacity-0 flex pointer-events-none"
         style={{ position: "fixed", top: -9999, left: -9999 }}
       >
-        {data?.map((category: Category) => (
+        {data?.map((category) => (
           <CategoryDropdown
             key={category?.id}
             category={category}
@@ -93,7 +89,7 @@ export function Categories({ data }: Props) {
       >
         {data
           ?.slice(0, visibleCount)
-          ?.map((category: Category) => (
+          ?.map((category) => (
             <CategoryDropdown
               key={category?.id}
               category={category}

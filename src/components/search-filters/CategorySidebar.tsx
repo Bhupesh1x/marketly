@@ -4,26 +4,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { Category } from "@/payload-types";
-
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { CategoryGetManyOutput } from "@/features/categories/types";
 
 interface Props {
   open: boolean;
-  data: Category[];
-
   onOpenChange: (open: boolean) => void;
 }
 
-export function CategorySidebar({ open, onOpenChange, data }: Props) {
+export function CategorySidebar({ open, onOpenChange }: Props) {
   const router = useRouter();
 
-  const [parentCategories, setParentCategories] = useState<Category[] | null>(
-    null
-  );
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
+  const trpc = useTRPC();
+  const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
+
+  const [parentCategories, setParentCategories] =
+    useState<CategoryGetManyOutput | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryGetManyOutput[1] | null
+  >(null);
 
   const currentCategory = parentCategories ?? data ?? [];
 
@@ -40,9 +41,11 @@ export function CategorySidebar({ open, onOpenChange, data }: Props) {
     onOpenChange(open);
   }
 
-  function onCategoryClick(category: Category) {
+  function onCategoryClick(category: CategoryGetManyOutput[1]) {
     if (category?.subcategories?.length) {
-      setParentCategories((category?.subcategories as Category[]) || []);
+      setParentCategories(
+        (category?.subcategories as CategoryGetManyOutput) || []
+      );
       setSelectedCategory(category);
     } else {
       // If leaf category (sub category) - Navigate to /category/subcategory

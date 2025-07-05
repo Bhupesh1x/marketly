@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { Category } from "@/payload-types";
+
+import { CategoryGetManyOutput } from "@/features/categories/types";
 
 import { Button } from "../ui/button";
 
@@ -10,7 +11,7 @@ import { SubcategoryMenu } from "./SubcategoryMenu";
 import { useGetDropdownPosition } from "./useGetDropdownPosition";
 
 interface Props {
-  category: Category;
+  category: CategoryGetManyOutput[1];
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }
