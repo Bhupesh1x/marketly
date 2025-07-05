@@ -2,6 +2,9 @@ import { cache } from "react";
 import superjson from "superjson";
 import { initTRPC } from "@trpc/server";
 
+import { getPayload } from "payload";
+import configPromise from "@payload-config";
+
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -21,4 +24,10 @@ const t = initTRPC.create({
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure;
+export const baseProcedure = t.procedure.use(async ({ next }) => {
+  const payload = await getPayload({
+    config: configPromise,
+  });
+
+  return next({ ctx: { payload } });
+});
