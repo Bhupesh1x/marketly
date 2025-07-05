@@ -7,6 +7,7 @@ import { Category } from "@/payload-types";
 
 import { Button } from "../ui/button";
 
+import { CategorySidebar } from "./CategorySidebar";
 import { CategoryDropdown } from "./CategoryDropdown";
 
 interface Props {
@@ -65,6 +66,11 @@ export function Categories({ data }: Props) {
 
   return (
     <div className="relative w-full">
+      <CategorySidebar
+        open={isSidebarOpen}
+        onOpenChange={setIsSidebarOpen}
+        data={data}
+      />
       <div
         ref={measureRef}
         className="absoulte opacity-0 flex pointer-events-none"
@@ -99,6 +105,7 @@ export function Categories({ data }: Props) {
         <div ref={viewAllRef} className="shrink-0">
           <Button
             className={`h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black ${isActiveCategoryHidden && !isAnyHovered ? "bg-white border-primary" : ""}`}
+            onClick={() => setIsSidebarOpen(true)}
           >
             View All
             <ListFilterIcon className="ml-2" />

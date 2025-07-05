@@ -29,13 +29,13 @@ export function SubcategoryMenu({ category, position, isOpen }: Props) {
         className="w-60 rounded-md text-black border overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]"
       >
         <div>
-          {category?.subcategories?.map((category: Category) => (
+          {category?.subcategories?.map((subcategory: Category) => (
             <Link
-              key={category.slug}
-              href="/"
+              key={subcategory.slug}
+              href={`/${category?.slug}/${subcategory?.slug}`}
               className="w-full p-2 text-left flex items-center justify-between hover:underline font-medium hover:bg-black hover:text-white  transition"
             >
-              {category?.name}
+              {subcategory?.name}
             </Link>
           ))}
         </div>
