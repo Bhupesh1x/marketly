@@ -1,7 +1,10 @@
 import z from "zod";
-import { headers as getHeaders } from "next/headers";
+import { headers as getHeaders, cookies as getCookies } from "next/headers";
 
+import { TRPCError } from "@trpc/server";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+
+import { AUTH_COOKIE } from "../constants";
 
 export const authRouter = createTRPCRouter({
   session: baseProcedure.query(async ({ ctx }) => {
@@ -33,7 +36,7 @@ export const authRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.payload.create({
+      await ctx.payload.create({
         collection: "users",
         data: {
           email: input.email,
@@ -42,6 +45,66 @@ export const authRouter = createTRPCRouter({
         },
       });
 
-      return user?.id;
+      const data = await ctx.payload.login({
+        collection: "users",
+        data: {
+          email: input.email,
+          password: input.password,
+        },
+      });
+
+      if (!data?.token) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Failed to login",
+        });
+      }
+
+      const cookies = await getCookies();
+      cookies.set({
+        name: AUTH_COOKIE,
+        value: data?.token,
+        httpOnly: true,
+        path: "/",
+      });
+
+      return data;
     }),
+  login: baseProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const data = await ctx.payload.login({
+        collection: "users",
+        data: {
+          email: input.email,
+          password: input.password,
+        },
+      });
+
+      if (!data?.token) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Failed to login",
+        });
+      }
+
+      const cookies = await getCookies();
+      cookies.set({
+        name: AUTH_COOKIE,
+        value: data?.token,
+        httpOnly: true,
+        path: "/",
+      });
+
+      return data;
+    }),
+  logout: baseProcedure.mutation(async () => {
+    const cookies = await getCookies();
+    cookies.delete(AUTH_COOKIE);
+  }),
 });
