@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 
 import { registerSchema } from "../schemas";
 
-export default function SignUpView() {
+export function SignUpView() {
   const form = useForm<z.infer<typeof registerSchema>>({
     mode: "all",
     resolver: zodResolver(registerSchema),

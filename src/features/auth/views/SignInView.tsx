@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 
 import { loginSchema } from "../schemas";
 
-export default function SignInView() {
+export function SignInView() {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
