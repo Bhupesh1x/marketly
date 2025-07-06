@@ -1,0 +1,62 @@
+import z from "zod";
+import type { Where } from "payload";
+
+import { Category } from "@/payload-types";
+
+import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+
+export const productsRouter = createTRPCRouter({
+  getMany: baseProcedure
+    .input(z.object({ category: z.string().optional().nullable() }))
+    .query(async ({ input, ctx }) => {
+      const where: Where = {};
+
+      if (input?.category) {
+        const parentCategoryData = await ctx.payload.find({
+          collection: "categories",
+          depth: 1, // Populate subcategories
+          limit: 1,
+          pagination: false,
+          where: {
+            slug: {
+              equals: input.category,
+            },
+          },
+        });
+
+        const formattedData = parentCategoryData?.docs?.map(
+          (doc: Category) => ({
+            ...doc,
+            subcategories: doc?.subcategories?.docs?.map((doc) => ({
+              ...(doc as Category),
+              subcategories: undefined,
+            })),
+          })
+        );
+
+        const subcategoriesSlugs = [];
+        const parentCategory = formattedData?.[0];
+
+        // For parent category want to load products listed under subcategories as well.
+        if (parentCategory?.subcategories) {
+          subcategoriesSlugs.push(
+            ...(parentCategory?.subcategories ?? [])?.map(
+              (subcategory) => subcategory?.slug
+            )
+          );
+        }
+
+        where["category.slug"] = {
+          in: [...subcategoriesSlugs, parentCategory?.slug],
+        };
+      }
+
+      const products = await ctx.payload.find({
+        collection: "products",
+        depth: 1, // Populate Image & Categories
+        where,
+      });
+
+      return products;
+    }),
+});
