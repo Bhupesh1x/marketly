@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { ListFilterIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -23,7 +24,8 @@ export function Categories() {
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const activeCategory = "all";
+  const params = useParams();
+  const activeCategory = params?.category || "all";
 
   const activeCategoryIndex = data.findIndex(
     (category) => category.slug === activeCategory
