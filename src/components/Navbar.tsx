@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+
+import { useTRPC } from "@/trpc/client";
 
 import { Button } from "./ui/button";
 import { MobileNavbar } from "./MobileNavbar";
@@ -35,6 +38,11 @@ export function Navbar() {
   const pathname = usePathname();
   const [isMobileNavbarOpen, setIsMobileNavbarOpen] = useState(false);
 
+  const trpc = useTRPC();
+  const { data: session, isLoading } = useQuery(
+    trpc.auth.session.queryOptions()
+  );
+
   return (
     <nav className="h-20 flex items-center justify-between border-b border-black shadow">
       <Link href="/">
@@ -54,22 +62,35 @@ export function Navbar() {
         ))}
       </div>
 
-      <div className="hidden lg:flex items-center border-l border-black h-full">
+      {session?.user ? (
         <Button
+          disabled={isLoading}
           variant="ghost"
           asChild
-          className="px-12 h-full rounded-none text-base font-medium hover:bg-purple-400 hover:text-black transition"
+          className="hidden lg:flex px-12 bg-black text-white h-full rounded-none font-medium text-base hover:bg-purple-400 hover:text-black transition"
         >
-          <Link href="/sign-in">Log in</Link>
+          <Link href="/admin">Dashboard</Link>
         </Button>
-        <Button
-          variant="ghost"
-          asChild
-          className="px-12 bg-black text-white h-full rounded-none font-medium text-base hover:bg-purple-400 hover:text-black transition"
-        >
-          <Link href="/sign-up">Start selling</Link>
-        </Button>
-      </div>
+      ) : (
+        <div className="hidden lg:flex items-center border-l border-black h-full">
+          <Button
+            disabled={isLoading}
+            variant="ghost"
+            asChild
+            className="px-12 h-full rounded-none text-base font-medium hover:bg-purple-400 hover:text-black transition"
+          >
+            <Link href="/sign-in">Log in</Link>
+          </Button>
+          <Button
+            disabled={isLoading}
+            variant="ghost"
+            asChild
+            className="px-12 bg-black text-white h-full rounded-none font-medium text-base hover:bg-purple-400 hover:text-black transition"
+          >
+            <Link href="/sign-up">Start selling</Link>
+          </Button>
+        </div>
+      )}
 
       <div className="flex lg:hidden items-center px-2">
         <Button
@@ -84,6 +105,8 @@ export function Navbar() {
         open={isMobileNavbarOpen}
         onOpenChange={setIsMobileNavbarOpen}
         items={navRoutes}
+        session={session}
+        isLoading={isLoading}
       />
     </nav>
   );

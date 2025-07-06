@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AuthResult } from "payload/dist/auth/operations/auth";
 
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
@@ -12,10 +13,18 @@ interface Item {
 interface Props {
   items: Item[];
   open: boolean;
+  session: AuthResult | undefined;
+  isLoading: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function MobileNavbar({ items, open, onOpenChange }: Props) {
+export function MobileNavbar({
+  items,
+  open,
+  isLoading,
+  session,
+  onOpenChange,
+}: Props) {
   const pathname = usePathname();
 
   return (
@@ -40,28 +49,46 @@ export function MobileNavbar({ items, open, onOpenChange }: Props) {
             </Button>
           ))}
 
-          <div className="border-t border-black">
-            <Button
-              asChild
-              variant="ghost"
-              className="!text-left flex justify-start rounded-none p-8 text-base"
-              onClick={() => onOpenChange(false)}
-            >
-              <Link href="/sign-in" className="!text-left">
-                Log in
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="ghost"
-              className="!text-left flex justify-start rounded-none p-8 text-base"
-              onClick={() => onOpenChange(false)}
-            >
-              <Link href="/sign-up" className="!text-left">
-                Start selling
-              </Link>
-            </Button>
-          </div>
+          {session?.user ? (
+            <div className="border-t border-black">
+              <Button
+                asChild
+                disabled={isLoading}
+                variant="ghost"
+                className="!text-left flex justify-start rounded-none p-8 text-base"
+                onClick={() => onOpenChange(false)}
+              >
+                <Link href="/admin" className="!text-left">
+                  Dashboard
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="border-t border-black">
+              <Button
+                asChild
+                disabled={isLoading}
+                variant="ghost"
+                className="!text-left flex justify-start rounded-none p-8 text-base"
+                onClick={() => onOpenChange(false)}
+              >
+                <Link href="/sign-in" className="!text-left">
+                  Log in
+                </Link>
+              </Button>
+              <Button
+                asChild
+                disabled={isLoading}
+                variant="ghost"
+                className="!text-left flex justify-start rounded-none p-8 text-base"
+                onClick={() => onOpenChange(false)}
+              >
+                <Link href="/sign-up" className="!text-left">
+                  Start selling
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>
