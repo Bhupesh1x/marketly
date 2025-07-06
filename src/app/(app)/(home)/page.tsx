@@ -1,7 +1,15 @@
-async function HomePage() {
+"use client";
+
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
+
+function HomePage() {
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.auth.session.queryOptions());
+
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Home Page User: {JSON.stringify(data?.user, null, 2)}</h1>
     </div>
   );
 }
