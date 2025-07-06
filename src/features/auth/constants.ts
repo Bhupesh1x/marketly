@@ -1,1 +1,1 @@
-export const AUTH_COOKIE = "maktetly-auth-cookie";
+export const AUTH_COOKIE = "payload-token";

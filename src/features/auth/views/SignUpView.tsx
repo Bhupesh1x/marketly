@@ -5,8 +5,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 
@@ -39,6 +39,7 @@ export default function SignUpView() {
   const trpc = useTRPC();
   const register = useMutation(trpc.auth.register.mutationOptions({}));
 
+  const queryClient = useQueryClient();
   function onSubmit(values: z.infer<typeof registerSchema>) {
     register.mutate(values, {
       onError: (error) => {
@@ -48,6 +49,7 @@ export default function SignUpView() {
         );
       },
       onSuccess: () => {
+        queryClient.invalidateQueries(trpc.auth.session.queryOptions());
         router.replace("/");
       },
     });
