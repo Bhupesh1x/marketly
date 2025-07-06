@@ -2,8 +2,13 @@
 
 import z from "zod";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useTRPC } from "@/trpc/client";
 
 import {
   Form,
@@ -30,8 +35,22 @@ export default function SignUpView() {
     },
   });
 
+  const router = useRouter();
+  const trpc = useTRPC();
+  const register = useMutation(trpc.auth.register.mutationOptions({}));
+
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log({ values });
+    register.mutate(values, {
+      onError: (error) => {
+        toast.error(
+          error?.message ||
+            "Failed to register. Please try again after sometime"
+        );
+      },
+      onSuccess: () => {
+        router.replace("/");
+      },
+    });
   }
 
   const nameError = form.formState.errors.username;
@@ -102,6 +121,7 @@ export default function SignUpView() {
             />
 
             <Button
+              disabled={register.isPending}
               type="submit"
               variant="elevated"
               size="lg"
