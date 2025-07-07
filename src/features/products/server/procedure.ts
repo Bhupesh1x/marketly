@@ -7,9 +7,27 @@ import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 
 export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
-    .input(z.object({ category: z.string().optional().nullable() }))
+    .input(
+      z.object({
+        category: z.string().optional().nullable(),
+        minPrice: z.string().nullable().optional(),
+        maxPrice: z.string().nullable().optional(),
+      })
+    )
     .query(async ({ input, ctx }) => {
       const where: Where = {};
+
+      if (input.minPrice) {
+        where["category.price"] = {
+          greater_than_equal: input.minPrice,
+        };
+      }
+
+      if (input.maxPrice) {
+        where["category.price"] = {
+          less_than_equal: input.maxPrice,
+        };
+      }
 
       if (input?.category) {
         const parentCategoryData = await ctx.payload.find({
