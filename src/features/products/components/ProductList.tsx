@@ -17,8 +17,13 @@ export function ProductList({ category }: Props) {
   );
 
   return (
-    <div>
-      <h1>{JSON.stringify(products, null, 2)}</h1>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      {products?.docs?.map((product) => (
+        <div key={product.id} className="border p-3 rounded-md bg-white">
+          <h4>{product?.name}</h4>
+          <p>Rs {product?.price}</p>
+        </div>
+      ))}
     </div>
   );
 }
