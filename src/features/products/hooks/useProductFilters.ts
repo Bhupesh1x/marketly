@@ -2,10 +2,10 @@ import { parseAsString, useQueryStates } from "nuqs";
 
 export function useProductFilters() {
   return useQueryStates({
-    minPrice: parseAsString.withOptions({
+    minPrice: parseAsString.withDefault("").withOptions({
       clearOnDefault: true,
     }),
-    maxPrice: parseAsString.withOptions({
+    maxPrice: parseAsString.withDefault("").withOptions({
       clearOnDefault: true,
     }),
   });

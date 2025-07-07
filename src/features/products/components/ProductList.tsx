@@ -21,7 +21,7 @@ export function ProductList({ category }: Props) {
       {products?.docs?.map((product) => (
         <div key={product.id} className="border p-3 rounded-md bg-white">
           <h4>{product?.name}</h4>
-          <p>Rs {product?.price}</p>
+          <p>₹ {product?.price}</p>
         </div>
       ))}
     </div>

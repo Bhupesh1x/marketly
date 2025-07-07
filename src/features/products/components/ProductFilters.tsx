@@ -1,6 +1,17 @@
+"use client";
+
+import { useProductFilters } from "../hooks/useProductFilters";
+
+import { PriceFilter } from "./PriceFilter";
 import { ProductFilter } from "./ProductFilter";
 
 export function ProductFilters() {
+  const [filters, setFilters] = useProductFilters();
+
+  function onChange(key: keyof typeof filters, value: unknown) {
+    setFilters({ ...filters, [key]: value });
+  }
+
   return (
     <div className="border rounded-md bg-white">
       <div className="flex items-center justify-between border-b p-3">
@@ -11,7 +22,12 @@ export function ProductFilters() {
       </div>
 
       <ProductFilter title="Price" className="border-b-0">
-        <p>Price filter!</p>
+        <PriceFilter
+          minPrice={filters?.minPrice}
+          maxPrice={filters?.maxPrice}
+          onMinPriceChange={(value) => onChange("minPrice", value)}
+          onMaxPriceChange={(value) => onChange("maxPrice", value)}
+        />
       </ProductFilter>
     </div>
   );
