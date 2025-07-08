@@ -76,7 +76,7 @@ export function SignInView() {
                 <FormItem>
                   <FormLabel className="text-base">Email</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="John@gmail.com" />
+                    <Input {...field} placeholder="john@gmail.com" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

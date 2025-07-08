@@ -12,13 +12,34 @@ export function ProductFilters() {
     setFilters({ ...filters, [key]: value });
   }
 
+  function onClear() {
+    setFilters({
+      maxPrice: "",
+      minPrice: "",
+    });
+  }
+
+  const hasFilters = Object.entries(filters)?.some(([, value]) => {
+    if (typeof value === "string") {
+      return value !== "";
+    }
+
+    return value !== null;
+  });
+
   return (
     <div className="border rounded-md bg-white">
       <div className="flex items-center justify-between border-b p-3">
         <p className="font-medium">Filters</p>
-        <button type="button" className="underline text-sm cursor-pointer">
-          Clear
-        </button>
+        {hasFilters && (
+          <button
+            type="button"
+            className="underline text-sm cursor-pointer"
+            onClick={onClear}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       <ProductFilter title="Price" className="border-b-0">
