@@ -4,6 +4,7 @@ import { useProductFilters } from "../hooks/useProductFilters";
 
 import { PriceFilter } from "./PriceFilter";
 import { ProductFilter } from "./ProductFilter";
+import { TagsFilter } from "./TagsFilter";
 
 export function ProductFilters() {
   const [filters, setFilters] = useProductFilters();
@@ -16,6 +17,7 @@ export function ProductFilters() {
     setFilters({
       maxPrice: "",
       minPrice: "",
+      tags: [],
     });
   }
 
@@ -42,12 +44,19 @@ export function ProductFilters() {
         )}
       </div>
 
-      <ProductFilter title="Price" className="border-b-0">
+      <ProductFilter title="Price">
         <PriceFilter
           minPrice={filters?.minPrice}
           maxPrice={filters?.maxPrice}
           onMinPriceChange={(value) => onChange("minPrice", value)}
           onMaxPriceChange={(value) => onChange("maxPrice", value)}
+        />
+      </ProductFilter>
+
+      <ProductFilter title="Tags" className="border-b-0">
+        <TagsFilter
+          value={filters.tags}
+          onTagChange={(value) => onChange("tags", value)}
         />
       </ProductFilter>
     </div>
