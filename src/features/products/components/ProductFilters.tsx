@@ -2,9 +2,9 @@
 
 import { useProductFilters } from "../hooks/useProductFilters";
 
+import { TagsFilter } from "./TagsFilter";
 import { PriceFilter } from "./PriceFilter";
 import { ProductFilter } from "./ProductFilter";
-import { TagsFilter } from "./TagsFilter";
 
 export function ProductFilters() {
   const [filters, setFilters] = useProductFilters();
