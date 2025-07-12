@@ -1,6 +1,8 @@
 import { SearchParams } from "nuqs";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
+import { DEFAULT_LIMIT } from "@/constants";
+
 import { getQueryClient, trpc } from "@/trpc/server";
 
 import { loadProductFilters } from "@/features/products/productParams";
@@ -18,8 +20,12 @@ async function SubCategoryPage({ params, searchParams }: Props) {
   const filters = await loadProductFilters(searchParams);
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions({ category: subcategory, ...filters })
+  void queryClient.prefetchInfiniteQuery(
+    trpc.products.getMany.infiniteQueryOptions({
+      category: subcategory,
+      ...filters,
+      limit: DEFAULT_LIMIT,
+    })
   );
 
   return (
