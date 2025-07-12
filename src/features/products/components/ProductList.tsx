@@ -9,9 +9,9 @@ import { DEFAULT_LIMIT } from "@/constants";
 
 import { Button } from "@/components/ui/button";
 
-import { ProductCard } from "./ProductCard";
-
 import { useProductFilters } from "../hooks/useProductFilters";
+
+import { ProductCard, ProductCardSkeleton } from "./ProductCard";
 
 interface Props {
   category: string;
@@ -81,5 +81,15 @@ export function ProductList({ category }: Props) {
         )}
       </div>
     </>
+  );
+}
+
+export function ProductListSkeleton() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      {Array.from({ length: DEFAULT_LIMIT })?.map((_, index) => (
+        <ProductCardSkeleton key={index} />
+      ))}
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
-import { ProductList } from "../components/ProductList";
 import { ProductFilters } from "../components/ProductFilters";
+import { ProductList, ProductListSkeleton } from "../components/ProductList";
 
 interface Props {
   category?: string;
@@ -14,7 +14,7 @@ export function ProductListView({ category }: Props) {
         <ProductFilters />
       </div>
       <div className="lg:col-span-5 xl:col-span-6">
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<ProductListSkeleton />}>
           <ProductList category={category || ""} />
         </Suspense>
       </div>
