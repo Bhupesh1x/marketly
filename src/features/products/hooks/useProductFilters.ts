@@ -1,4 +1,11 @@
-import { useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
+import {
+  parseAsString,
+  useQueryStates,
+  parseAsArrayOf,
+  parseAsStringLiteral,
+} from "nuqs";
+
+const sortValues = ["curated", "trending", "hot_and_new"];
 
 const params = {
   minPrice: parseAsString.withDefault("").withOptions({
@@ -10,6 +17,9 @@ const params = {
   tags: parseAsArrayOf(parseAsString).withDefault([]).withOptions({
     clearOnDefault: true,
   }),
+  sort: parseAsStringLiteral(sortValues)
+    .withDefault("curated")
+    .withOptions({ clearOnDefault: true }),
 };
 
 export function useProductFilters() {
