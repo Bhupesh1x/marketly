@@ -1,6 +1,8 @@
 import z from "zod";
 import type { Sort, Where } from "payload";
 
+import { DEFAULT_LIMIT } from "@/constants";
+
 import { Category, Media } from "@/payload-types";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
@@ -16,6 +18,8 @@ export const productsRouter = createTRPCRouter({
         maxPrice: z.string().nullable().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+        cursor: z.number().default(1),
+        limit: z.number().default(DEFAULT_LIMIT),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -100,6 +104,8 @@ export const productsRouter = createTRPCRouter({
         depth: 1, // Populate Image & Categories
         where,
         sort,
+        page: input.cursor,
+        limit: input.limit,
       });
 
       return {
