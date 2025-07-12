@@ -4,6 +4,7 @@ import type { Sort, Where } from "payload";
 import { Category } from "@/payload-types";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+
 import { sortValues } from "../productParams";
 
 export const productsRouter = createTRPCRouter({
