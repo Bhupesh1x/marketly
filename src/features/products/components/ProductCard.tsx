@@ -66,3 +66,9 @@ export function ProductCard({
     </Link>
   );
 }
+
+export function ProductCardSkeleton() {
+  return (
+    <div className="w-full aspect-3/4 bg-neutral-200 rounded-md animate-pulse" />
+  );
+}
