@@ -5,7 +5,7 @@ import {
   parseAsStringLiteral,
 } from "nuqs";
 
-const sortValues = ["curated", "trending", "hot_and_new"];
+const sortValues = ["curated", "trending", "hot_and_new"] as const;
 
 const params = {
   minPrice: parseAsString.withDefault("").withOptions({

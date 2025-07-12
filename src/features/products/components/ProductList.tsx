@@ -4,6 +4,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 
+import { ProductCard } from "./ProductCard";
+
 import { useProductFilters } from "../hooks/useProductFilters";
 
 interface Props {
@@ -23,10 +25,17 @@ export function ProductList({ category }: Props) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
       {products?.docs?.map((product) => (
-        <div key={product.id} className="border p-3 rounded-md bg-white">
-          <h4>{product?.name}</h4>
-          <p>₹ {product?.price}</p>
-        </div>
+        <ProductCard
+          key={product.id}
+          id={product.id}
+          name={product?.name || ""}
+          authorName="john"
+          authorImageUrl={null}
+          price={product.price}
+          rating={3}
+          reviewCount={5}
+          imageUrl={product?.image?.url || ""}
+        />
       ))}
     </div>
   );

@@ -25,3 +25,14 @@ export function formatAsCurrency(value: string) {
     maximumFractionDigits: 2,
   }).format(numberValue);
 }
+
+export function formatPrice(value: number) {
+  if (!value) return "";
+
+  return new Intl.NumberFormat("en-Us", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
