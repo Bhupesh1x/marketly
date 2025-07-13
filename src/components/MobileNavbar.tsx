@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AuthStrategyResult } from "payload";
 
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
-import { AuthStrategyResult } from "payload";
 
 interface Item {
   title: string;
