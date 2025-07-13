@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AuthResult } from "payload/dist/auth/operations/auth";
 
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
+import { AuthStrategyResult } from "payload";
 
 interface Item {
   title: string;
@@ -13,7 +13,7 @@ interface Item {
 interface Props {
   items: Item[];
   open: boolean;
-  session: AuthResult | undefined;
+  session: AuthStrategyResult | undefined;
   isLoading: boolean;
   onOpenChange: (open: boolean) => void;
 }

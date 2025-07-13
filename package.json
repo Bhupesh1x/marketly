@@ -9,13 +9,15 @@
     "start": "next start",
     "lint": "next lint",
     "generate:types": "payload generate:types",
-    "db:fresh": "payload migrate:fresh"
+    "db:fresh": "payload migrate:fresh",
+    "db:seed": "bun run src/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
     "@payloadcms/db-mongodb": "^3.39.1",
     "@payloadcms/next": "^3.39.1",
     "@payloadcms/payload-cloud": "^3.39.1",
+    "@payloadcms/plugin-multi-tenant": "3.39.1",
     "@payloadcms/richtext-lexical": "^3.39.1",
     "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-dialog": "^1.1.13",
