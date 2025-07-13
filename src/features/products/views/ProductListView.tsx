@@ -5,9 +5,10 @@ import { ProductList, ProductListSkeleton } from "../components/ProductList";
 
 interface Props {
   category?: string;
+  tenantSlug?: string;
 }
 
-export function ProductListView({ category }: Props) {
+export function ProductListView({ category, tenantSlug }: Props) {
   return (
     <div className="px-4 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-7 xl:grid-cols-8 gap-8">
       <div className="lg:col-span-2 xl:col-span-2">
@@ -15,7 +16,7 @@ export function ProductListView({ category }: Props) {
       </div>
       <div className="lg:col-span-5 xl:col-span-6">
         <Suspense fallback={<ProductListSkeleton />}>
-          <ProductList category={category || ""} />
+          <ProductList category={category} tenantSlug={tenantSlug} />
         </Suspense>
       </div>
     </div>

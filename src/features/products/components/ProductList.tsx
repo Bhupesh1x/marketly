@@ -14,10 +14,11 @@ import { useProductFilters } from "../hooks/useProductFilters";
 import { ProductCard, ProductCardSkeleton } from "./ProductCard";
 
 interface Props {
-  category: string;
+  category?: string;
+  tenantSlug?: string;
 }
 
-export function ProductList({ category }: Props) {
+export function ProductList({ category, tenantSlug }: Props) {
   const trpc = useTRPC();
   const [filters] = useProductFilters();
   const {
@@ -29,6 +30,7 @@ export function ProductList({ category }: Props) {
     trpc.products.getMany.infiniteQueryOptions(
       {
         category,
+        tenantSlug,
         ...filters,
         limit: DEFAULT_LIMIT,
       },
