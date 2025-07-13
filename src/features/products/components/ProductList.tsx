@@ -59,8 +59,8 @@ export function ProductList({ category }: Props) {
               key={product.id}
               id={product.id}
               name={product?.name || ""}
-              authorName="john"
-              authorImageUrl={null}
+              authorName={product?.tenant?.name}
+              authorImageUrl={product?.tenant?.image?.url}
               price={product.price}
               rating={3}
               reviewCount={5}
