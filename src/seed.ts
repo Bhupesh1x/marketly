@@ -142,6 +142,14 @@ const categories = [
 const seed = async () => {
   const payload = await getPayload({ config }); // Initialize Payload with the given config
 
+  const tenant = await payload.create({
+    collection: "tenants",
+    data: {
+      name: "admin",
+      slug: "admin",
+      stripeAccountId: "admin",
+    },
+  });
   // Create admin user
   // This user acts as the global super-admin for the platform.
   // Has elevated privileges and is linked to the admin tenant for top-level access.
@@ -152,6 +160,11 @@ const seed = async () => {
       password: "demo", // Admin's initial password (should be updated in production)
       roles: ["super-admin"], // Assign the highest-level role for unrestricted access
       username: "admin", // Username used for internal identification or display
+      tenants: [
+        {
+          tenant: tenant.id,
+        },
+      ],
     },
   });
 
