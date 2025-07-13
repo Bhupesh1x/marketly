@@ -16,9 +16,10 @@ import { ProductCard, ProductCardSkeleton } from "./ProductCard";
 interface Props {
   category?: string;
   tenantSlug?: string;
+  narrowView?: boolean;
 }
 
-export function ProductList({ category, tenantSlug }: Props) {
+export function ProductList({ category, tenantSlug, narrowView }: Props) {
   const trpc = useTRPC();
   const [filters] = useProductFilters();
   const {
@@ -53,7 +54,9 @@ export function ProductList({ category, tenantSlug }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 ${narrowView ? "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3" : ""}`}
+      >
         {products?.pages
           ?.flatMap((page) => page?.docs ?? [])
           ?.map((product) => (
@@ -61,8 +64,8 @@ export function ProductList({ category, tenantSlug }: Props) {
               key={product.id}
               id={product.id}
               name={product?.name || ""}
-              authorName={product?.tenant?.name}
-              authorImageUrl={product?.tenant?.image?.url}
+              tenantSlug={product?.tenant?.slug}
+              tenantImageUrl={product?.tenant?.image?.url}
               price={product.price}
               rating={3}
               reviewCount={5}
@@ -86,9 +89,11 @@ export function ProductList({ category, tenantSlug }: Props) {
   );
 }
 
-export function ProductListSkeleton() {
+export function ProductListSkeleton({ narrowView }: { narrowView?: boolean }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+    <div
+      className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 ${narrowView ? "lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3" : ""}`}
+    >
       {Array.from({ length: DEFAULT_LIMIT })?.map((_, index) => (
         <ProductCardSkeleton key={index} />
       ))}

@@ -36,3 +36,7 @@ export function formatPrice(value: number) {
     maximumFractionDigits: 2,
   }).format(value);
 }
+
+export function generateTenantUrl(tenantSlug: string) {
+  return `/tenants/${tenantSlug}`;
+}

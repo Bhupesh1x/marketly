@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/media
 
 # next.js
 /.next/
