@@ -36,7 +36,7 @@ export function ProductCard({
   }
 
   return (
-    <Link href={`/products/${id}`}>
+    <Link href={`${generateTenantUrl(tenantSlug)}/products/${id}`}>
       <div
         className={`border rounded-md py-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow`}
       >
