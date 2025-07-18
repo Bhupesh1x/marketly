@@ -22,13 +22,13 @@ async function TenantHomeLayout({ children, params }: Props) {
   );
 
   return (
-    <div className="min-h-screen w-full bg-[#f4f4f0]">
+    <div className="min-h-screen w-full bg-[#f4f4f0] flex flex-col">
       <HydrationBoundary>
         <Suspense fallback={<NavbarSkeleton />}>
           <Navbar slug={slug} />
         </Suspense>
       </HydrationBoundary>
-      <main className="w-full h-full">
+      <main className="w-full h-full flex-1">
         <div className="max-w-(--breakpoint-xl) mx-auto">{children}</div>
       </main>
       <Footer />
