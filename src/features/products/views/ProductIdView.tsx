@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Fragment } from "react";
+import dynamic from "next/dynamic";
 import { LinkIcon, StarIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
@@ -12,6 +13,21 @@ import { formatPrice, generateTenantUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { StarRating } from "@/components/StarRating";
+
+const CartButton = dynamic(
+  () =>
+    import("@/features/checkout/components/CartButton").then(
+      (mod) => mod.CartButton
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <Button disabled variant="elevated" className="flex-1">
+        Add to cart
+      </Button>
+    ),
+  }
+);
 
 interface Props {
   productId: string;
@@ -78,9 +94,7 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
           <div className="lg:w-[35%] border-t lg:border-none">
             <div className="p-4 py-[1.27rem]">
               <div className="flex items-center gap-2">
-                <Button variant="elevated" className="flex-1">
-                  Add to cart
-                </Button>
+                <CartButton productId={product?.id} tenantSlug={tenantSlug} />
                 <Button variant="elevated">
                   <LinkIcon />
                 </Button>
