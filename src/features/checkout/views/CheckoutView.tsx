@@ -3,12 +3,14 @@
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { InboxIcon } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 import { generateTenantUrl } from "@/lib/utils";
 
 import { useCart } from "../hooks/useCart";
+import { useCheckoutStates } from "../hooks/useCheckoutStates";
 
 import {
   CheckoutSidebar,
@@ -21,9 +23,11 @@ interface Props {
 }
 
 export function CheckoutView({ slug }: Props) {
-  const { productIds, clearAllCarts, removeProduct } = useCart({
+  const { productIds, clearAllCarts, removeProduct, clearCart } = useCart({
     tenantSlug: slug,
   });
+  const router = useRouter();
+  const [states, setStates] = useCheckoutStates();
 
   const trpc = useTRPC();
   const {
@@ -36,12 +40,46 @@ export function CheckoutView({ slug }: Props) {
     })
   );
 
+  const purchaseMutation = useMutation(
+    trpc.checkout.purchase.mutationOptions({
+      onMutate: () => {
+        setStates({ success: false, cancel: false });
+      },
+      onSuccess: (data) => {
+        window.location.href = data.url;
+      },
+      onError: (error) => {
+        if (error?.data?.code === "UNAUTHORIZED") {
+          router.replace("/sign-in");
+        }
+
+        toast.error(
+          error?.message ||
+            "Error while checkout. Please try again after sometime"
+        );
+      },
+    })
+  );
+
   useEffect(() => {
     if (error?.data?.code === "NOT_FOUND") {
       clearAllCarts();
       toast.warning("Invalid products found, cart cleared");
     }
   }, [error]);
+
+  useEffect(() => {
+    if (states?.success) {
+      setStates({ success: false, cancel: false });
+      clearCart();
+
+      router.push("/products");
+    }
+  }, [states.success]);
+
+  function onCheckout() {
+    purchaseMutation.mutate({ tenantSlug: slug, ids: productIds });
+  }
 
   if (isLoading) {
     return (
@@ -88,9 +126,9 @@ export function CheckoutView({ slug }: Props) {
       <div className="lg:col-span-3">
         <CheckoutSidebar
           totalPrice={products?.totalPrice || 0}
-          onCheckout={() => {}}
-          isCancelled={false}
-          isPending={false}
+          onCheckout={() => onCheckout()}
+          isCancelled={states.cancel}
+          isPending={purchaseMutation.isPending}
         />
       </div>
     </div>
