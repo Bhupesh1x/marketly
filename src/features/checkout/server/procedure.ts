@@ -30,8 +30,14 @@ export const checkoutRouter = createTRPCRouter({
         });
       }
 
+      const totalPrice = products?.docs?.reduce(
+        (acc, product) => acc + (product?.price ?? 0),
+        0
+      );
+
       return {
         ...products,
+        totalPrice,
         docs: products?.docs?.map((doc) => ({
           ...doc,
           image: doc?.image as Media | null,
