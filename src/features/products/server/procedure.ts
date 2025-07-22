@@ -1,6 +1,7 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
 import type { Sort, Where } from "payload";
+import { headers as getHeaders } from "next/headers";
 
 import { DEFAULT_LIMIT } from "@/constants";
 
@@ -153,8 +154,37 @@ export const productsRouter = createTRPCRouter({
         });
       }
 
+      const headers = await getHeaders();
+      const session = await ctx.payload.auth({ headers });
+
+      let isPurchased = false;
+      if (session?.user?.id) {
+        const ordersData = await ctx.payload.find({
+          collection: "orders",
+          limit: 1,
+          pagination: false,
+          where: {
+            and: [
+              {
+                product: {
+                  equals: product.id,
+                },
+              },
+              {
+                user: {
+                  equals: session?.user?.id,
+                },
+              },
+            ],
+          },
+        });
+
+        isPurchased = !!ordersData?.totalDocs;
+      }
+
       return {
         ...product,
+        isPurchased,
         image: product?.image as Media | null,
         tenant: product?.tenant as Tenant & { image: Media | null },
       };

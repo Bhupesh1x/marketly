@@ -94,7 +94,11 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
           <div className="lg:w-[35%] border-t lg:border-none">
             <div className="p-4 py-[1.27rem]">
               <div className="flex items-center gap-2">
-                <CartButton productId={product?.id} tenantSlug={tenantSlug} />
+                <CartButton
+                  productId={product?.id}
+                  tenantSlug={tenantSlug}
+                  isPurchased={product?.isPurchased}
+                />
                 <Button variant="elevated">
                   <LinkIcon />
                 </Button>
