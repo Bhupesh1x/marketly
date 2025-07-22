@@ -75,7 +75,7 @@ export function CheckoutView({ slug }: Props) {
 
       router.push("/products");
     }
-  }, [states.success]);
+  }, [states?.success]);
 
   function onCheckout() {
     purchaseMutation.mutate({ tenantSlug: slug, ids: productIds });
