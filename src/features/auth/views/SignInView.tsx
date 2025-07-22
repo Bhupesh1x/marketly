@@ -4,8 +4,8 @@ import z from "zod";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
@@ -33,6 +33,7 @@ export function SignInView() {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
   const trpc = useTRPC();
   const login = useMutation(trpc.auth.login.mutationOptions({}));
 
@@ -46,7 +47,14 @@ export function SignInView() {
       },
       onSuccess: () => {
         queryClient.invalidateQueries(trpc.auth.session.queryOptions());
-        router.replace("/");
+
+        const url = searchParams?.get("return-url");
+
+        if (url) {
+          router.replace(url);
+        } else {
+          router.replace("/");
+        }
       },
     });
   }

@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { InboxIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
@@ -27,6 +27,8 @@ export function CheckoutView({ slug }: Props) {
     tenantSlug: slug,
   });
   const router = useRouter();
+  const pathname = usePathname();
+
   const [states, setStates] = useCheckoutStates();
 
   const trpc = useTRPC();
@@ -50,7 +52,7 @@ export function CheckoutView({ slug }: Props) {
       },
       onError: (error) => {
         if (error?.data?.code === "UNAUTHORIZED") {
-          router.replace("/sign-in");
+          router.replace(`/sign-in?return-url=${pathname}`);
         }
 
         toast.error(
