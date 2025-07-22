@@ -1,15 +1,18 @@
+import { useShallow } from "zustand/react/shallow";
+
 import { useCartStore } from "../store/useCartStore";
 
 export function useCart({ tenantSlug }: { tenantSlug: string }) {
-  const {
-    addProductToCart,
-    clearAllCarts,
-    clearCart,
-    getCartByTenant,
-    removeProductFromCart,
-  } = useCartStore();
+  const addProductToCart = useCartStore((state) => state.addProductToCart);
+  const clearAllCarts = useCartStore((state) => state.clearAllCarts);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const removeProductFromCart = useCartStore(
+    (state) => state.removeProductFromCart
+  );
 
-  const productIds = getCartByTenant(tenantSlug);
+  const productIds = useCartStore(
+    useShallow((state) => state?.tenantCart?.[tenantSlug]?.productIds || [])
+  );
 
   function toogleProduct(productId: string) {
     if (productIds?.includes(productId)) {
