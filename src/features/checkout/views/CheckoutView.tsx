@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { InboxIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 import { generateTenantUrl } from "@/lib/utils";
@@ -32,6 +32,8 @@ export function CheckoutView({ slug }: Props) {
   const [states, setStates] = useCheckoutStates();
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const {
     data: products,
     error,
@@ -75,7 +77,8 @@ export function CheckoutView({ slug }: Props) {
       setStates({ success: false, cancel: false });
       clearCart();
 
-      router.push("/products");
+      queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
+      router.push("/library");
     }
   }, [states?.success]);
 
