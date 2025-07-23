@@ -44,7 +44,7 @@ export function SearchInput({ disabled }: Props) {
       </Button>
       {!!session?.user && !isLoading && (
         <Button asChild variant="elevated">
-          <Link href="/library">
+          <Link prefetch href="/library">
             <BookmarkCheckIcon className="size-6" />
             Library
           </Link>
