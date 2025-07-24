@@ -1,4 +1,5 @@
 import z from "zod";
+import { TRPCError } from "@trpc/server";
 
 import { DEFAULT_LIMIT } from "@/constants";
 
@@ -47,5 +48,50 @@ export const libraryRouter = createTRPCRouter({
           tenant: doc?.tenant as Tenant & { image: Media | null },
         })),
       };
+    }),
+  getOne: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string().min(1),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const orderData = await ctx.payload.find({
+        collection: "orders",
+        depth: 0,
+        pagination: false,
+        limit: 1,
+        where: {
+          and: [
+            {
+              user: {
+                equals: ctx.session.user.id,
+              },
+            },
+            {
+              product: {
+                equals: input.productId,
+              },
+            },
+          ],
+        },
+      });
+
+      const order = orderData?.docs?.[0];
+
+      if (!order) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Order not found" });
+      }
+
+      const product = await ctx.payload.findByID({
+        collection: "products",
+        id: order.product as string,
+      });
+
+      if (!product) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Order not found" });
+      }
+
+      return product;
     }),
 });
