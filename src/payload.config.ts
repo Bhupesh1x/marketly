@@ -13,6 +13,7 @@ import { Tags } from "./collections/Tags";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Orders } from "./collections/Orders";
+import { Reviews } from "./collections/Reviews";
 import { Tenants } from "./collections/Tenants";
 import { Products } from "./collections/Products";
 import { Categories } from "./collections/Categories";
@@ -27,7 +28,16 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, Tags, Tenants, Orders],
+  collections: [
+    Users,
+    Media,
+    Categories,
+    Products,
+    Tags,
+    Tenants,
+    Orders,
+    Reviews,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
