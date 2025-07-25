@@ -43,11 +43,7 @@ export const reviewsRouter = createTRPCRouter({
         },
       });
 
-      const review = reviewsData?.docs?.[0];
-
-      if (!review) {
-        throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
-      }
+      const review = reviewsData?.docs?.[0] || null;
 
       return review;
     }),
