@@ -2,6 +2,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { ReviewForm } from "./ReviewForm";
 
 interface Props {
@@ -21,4 +23,8 @@ export function ReviewSidebar({ productId }: Props) {
       <ReviewForm initialData={review} productId={productId} />
     </>
   );
+}
+
+export function ReviewSidebarSkeleton() {
+  return <Skeleton className="h-[208px] w-full" />;
 }

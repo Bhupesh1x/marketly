@@ -111,7 +111,9 @@ export function ReviewForm({ initialData, productId }: Props) {
                 <StarPicker
                   value={field.value}
                   onChange={field.onChange}
-                  disabled={isPreview}
+                  disabled={
+                    isPreview || addReview?.isPending || updateReview?.isPending
+                  }
                 />
               </FormControl>
               <FormMessage />
@@ -141,7 +143,8 @@ export function ReviewForm({ initialData, productId }: Props) {
           <Button
             disabled={addReview?.isPending || updateReview?.isPending}
             type="submit"
-            variant="default"
+            variant="elevated"
+            className="bg-black text-white hover:bg-purple-400 hover:text-black transition"
           >
             Submit
           </Button>

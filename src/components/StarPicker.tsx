@@ -20,7 +20,7 @@ export function StarPicker({ value, onChange, disabled, className }: Props) {
           key={star}
           type="button"
           disabled={disabled}
-          onClick={() => onChange(star)}
+          onClick={() => onChange?.(star)}
           onMouseEnter={() => setHoverValue(star)}
           onMouseLeave={() => setHoverValue(0)}
           className={`p-0.5 ${!disabled ? "hover:scale-105 transition cursor-pointer" : ""}`}

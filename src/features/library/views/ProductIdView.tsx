@@ -7,7 +7,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
 
-import { ReviewSidebar } from "@/features/reviews/components/ReviewSidebar";
+import {
+  ReviewSidebar,
+  ReviewSidebarSkeleton,
+} from "@/features/reviews/components/ReviewSidebar";
 
 interface Props {
   productId: string;
@@ -37,7 +40,7 @@ export function ProductIdView({ productId }: Props) {
       <section className="max-w-(--breakpoint-xl) mx-auto px-4 lg:px-12 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-16 w-full">
           <div className="lg:col-span-2 bg-white border rounded-md p-4">
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<ReviewSidebarSkeleton />}>
               <ReviewSidebar productId={productId} />
             </Suspense>
           </div>
