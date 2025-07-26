@@ -67,8 +67,8 @@ export function ProductList({ category, tenantSlug, narrowView }: Props) {
               tenantSlug={product?.tenant?.slug}
               tenantImageUrl={product?.tenant?.image?.url}
               price={product.price}
-              rating={product.ratings}
-              reviewCount={product.totalRatings}
+              rating={product.reviewRating}
+              reviewCount={product.reviewCount}
               imageUrl={product?.image?.url || ""}
             />
           ))}

@@ -5,7 +5,7 @@ import { headers as getHeaders } from "next/headers";
 
 import { DEFAULT_LIMIT } from "@/constants";
 
-import { Category, Media, Tenant } from "@/payload-types";
+import { Category, Media, Review, Tenant } from "@/payload-types";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 
@@ -117,32 +117,52 @@ export const productsRouter = createTRPCRouter({
         limit: input.limit,
       });
 
-      const productsWithSumarrizedReviews = await Promise.all(
-        products?.docs?.map(async (product) => {
-          const reviews = await ctx.payload.find({
-            collection: "reviews",
-            pagination: false,
-            where: {
-              product: {
-                equals: product.id,
-              },
-            },
-          });
+      const allProductIds = products?.docs?.map((product) => product.id) || [];
 
-          return {
-            ...product,
-            totalRatings: reviews.totalDocs,
-            ratings:
-              reviews?.totalDocs > 0
-                ? reviews?.docs?.reduce(
-                    (acc, review) =>
-                      (acc + review.ratings) / reviews?.totalDocs,
-                    0
-                  )
-                : 0,
-          };
-        })
-      );
+      const allReviewsData = await ctx.payload.find({
+        collection: "reviews",
+        pagination: false,
+        depth: 0,
+        where: {
+          product: {
+            in: allProductIds,
+          },
+        },
+      });
+
+      // Group reviews by product id
+      const reviewsByProductId: Record<string, Review[]> =
+        allReviewsData?.docs?.reduce(
+          (acc, review) => {
+            const productId = review.product as string;
+            if (!acc[productId]) {
+              acc[productId] = [];
+            }
+
+            acc[productId].push(review);
+
+            return acc;
+          },
+          {} as Record<string, Review[]>
+        );
+
+      const productsWithSumarrizedReviews = products?.docs?.map((doc) => {
+        const productReviews = reviewsByProductId[doc.id] || [];
+        const reviewCount = productReviews?.length;
+        const reviewRating =
+          reviewCount === 0
+            ? 0
+            : productReviews?.reduce(
+                (acc, product) => (acc + (product.ratings ?? 0)) / reviewCount,
+                0
+              );
+
+        return {
+          ...doc,
+          reviewCount,
+          reviewRating,
+        };
+      });
 
       return {
         ...products,

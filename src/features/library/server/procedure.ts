@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 
 import { DEFAULT_LIMIT } from "@/constants";
 
-import { Media, Tenant } from "@/payload-types";
+import { Media, Review, Tenant } from "@/payload-types";
 
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
@@ -40,9 +40,55 @@ export const libraryRouter = createTRPCRouter({
         },
       });
 
+      const allProductIds = products?.docs?.map((product) => product.id) || [];
+
+      const allReviewsData = await ctx.payload.find({
+        collection: "reviews",
+        pagination: false,
+        depth: 0,
+        where: {
+          product: {
+            in: allProductIds,
+          },
+        },
+      });
+
+      // Group reviews by product id
+      const reviewsByProductId: Record<string, Review[]> =
+        allReviewsData?.docs?.reduce(
+          (acc, review) => {
+            const productId = review.product as string;
+            if (!acc[productId]) {
+              acc[productId] = [];
+            }
+
+            acc[productId].push(review);
+
+            return acc;
+          },
+          {} as Record<string, Review[]>
+        );
+
+      const productsWithSumarrizedReviews = products?.docs?.map((doc) => {
+        const productReviews = reviewsByProductId[doc.id] || [];
+        const reviewCount = productReviews?.length;
+        const reviewRating =
+          reviewCount === 0
+            ? 0
+            : productReviews?.reduce(
+                (acc, product) => (acc + (product.ratings ?? 0)) / reviewCount,
+                0
+              );
+
+        return {
+          ...doc,
+          reviewCount,
+          reviewRating,
+        };
+      });
       return {
         ...products,
-        docs: products?.docs?.map((doc) => ({
+        docs: productsWithSumarrizedReviews?.map((doc) => ({
           ...doc,
           image: doc?.image as Media | null,
           tenant: doc?.tenant as Tenant & { image: Media | null },

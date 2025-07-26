@@ -55,8 +55,8 @@ export function ProductList() {
               tenantSlug={product?.tenant?.slug}
               tenantImageUrl={product?.tenant?.image?.url}
               price={product.price}
-              rating={3}
-              reviewCount={5}
+              rating={product?.reviewRating || 0}
+              reviewCount={product?.reviewCount || 0}
               imageUrl={product?.image?.url || ""}
               isLibrary
             />

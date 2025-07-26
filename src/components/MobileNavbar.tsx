@@ -50,7 +50,7 @@ export function MobileNavbar({
           ))}
 
           {session?.user ? (
-            <div className="border-t border-black">
+            <div>
               <Button
                 asChild
                 disabled={isLoading}
@@ -64,7 +64,7 @@ export function MobileNavbar({
               </Button>
             </div>
           ) : (
-            <div className="border-t border-black">
+            <div>
               <Button
                 asChild
                 disabled={isLoading}
