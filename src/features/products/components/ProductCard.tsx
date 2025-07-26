@@ -77,12 +77,16 @@ export function ProductCard({
               {tenantSlug}
             </p>
           </div>
-          <div className="flex items-center gap-1">
-            <StarIcon className="fill-black size-3.5" />
-            <p className="text-sm font-medium">
-              {rating} ({reviewCount})
-            </p>
-          </div>
+          {!!reviewCount ? (
+            <div className="flex items-center gap-1">
+              <StarIcon className="fill-black size-3.5" />
+              <p className="text-sm font-medium">
+                {rating} ({reviewCount})
+              </p>
+            </div>
+          ) : (
+            <div className="min-h-5" />
+          )}
         </div>
         {!isLibrary && (
           <div className="p-4">

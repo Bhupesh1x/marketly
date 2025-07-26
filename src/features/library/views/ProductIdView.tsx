@@ -47,7 +47,7 @@ export function ProductIdView({ productId }: Props) {
 
           <div className="lg:col-span-5">
             <p className="font-medium italic text-muted-foreground">
-              Special content
+              No special content
             </p>
           </div>
         </div>
