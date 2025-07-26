@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { toast } from "sonner";
 import Image from "next/image";
 import { Fragment } from "react";
 import dynamic from "next/dynamic";
@@ -41,6 +42,17 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
       id: productId,
     })
   );
+
+  function onCopy() {
+    try {
+      navigator.clipboard?.writeText(window.location.href || "");
+      toast.success("Product link copied");
+    } catch {
+      toast.error(
+        "Failed to copy product url. Please try again after sometime"
+      );
+    }
+  }
 
   return (
     <div className="px-4 lg:px-12 py-10">
@@ -84,8 +96,11 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                 </div>
               </div>
               <div className="p-4 border-t lg:border-0 flex items-center gap-2">
-                <StarRating rating={3} />
-                <p className="font-medium pt-[0.5]">0 ratings</p>
+                <StarRating rating={product.reviewRating || 0} />
+                <p className="font-medium pt-[0.5]">
+                  ({product?.reviewRating || 0}) {product?.reviewCount || 0}{" "}
+                  ratings
+                </p>
               </div>
             </div>
             <div className="p-4 border-t">{product?.description || ""}</div>
@@ -99,7 +114,7 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                   tenantSlug={tenantSlug}
                   isPurchased={product?.isPurchased}
                 />
-                <Button variant="elevated">
+                <Button variant="elevated" onClick={onCopy}>
                   <LinkIcon />
                 </Button>
               </div>
@@ -114,7 +129,10 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                 <p className="text-lg font-medium">Ratings</p>
                 <div className="flex items-center gap-1">
                   <StarIcon className="size-4 fill-black" />
-                  <p className="font-[550] pt-0.5">(0) 0 ratings</p>
+                  <p className="font-[550] pt-0.5">
+                    ({product?.reviewRating || 0}) {product?.reviewCount || 0}{" "}
+                    ratings
+                  </p>
                 </div>
               </div>
 
@@ -124,8 +142,11 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                     <p>
                       {star} {star === 1 ? "star" : "stars"}
                     </p>
-                    <Progress value={5} className="h-[1lh]" />
-                    <p>0 %</p>
+                    <Progress
+                      value={product?.reviewDistribution[star] || 0}
+                      className="h-[1lh]"
+                    />
+                    <p>{product?.reviewDistribution[star] || 0} %</p>
                   </Fragment>
                 ))}
               </div>
