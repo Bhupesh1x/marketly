@@ -1,9 +1,15 @@
 import type { CollectionConfig } from "payload";
 
+import { isSuperAdmin } from "@/lib/access";
+
 export const Tenants: CollectionConfig = {
   slug: "tenants",
   admin: {
     useAsTitle: "slug",
+  },
+  access: {
+    create: ({ req }) => isSuperAdmin(req.user),
+    delete: ({ req }) => isSuperAdmin(req.user),
   },
   fields: [
     {
@@ -25,6 +31,9 @@ export const Tenants: CollectionConfig = {
         description:
           "This is the subdomain of the store (e.g. [slug].marketly.com)",
       },
+      access: {
+        update: ({ req }) => isSuperAdmin(req?.user),
+      },
     },
     {
       name: "image",
@@ -37,6 +46,10 @@ export const Tenants: CollectionConfig = {
       required: true,
       admin: {
         readOnly: true,
+        description: "Stripe Account ID associated with your shop",
+      },
+      access: {
+        update: ({ req }) => isSuperAdmin(req?.user),
       },
     },
     {
@@ -46,6 +59,9 @@ export const Tenants: CollectionConfig = {
         readOnly: true,
         description:
           "You cannot create products until you submit your stripe details",
+      },
+      access: {
+        update: ({ req }) => isSuperAdmin(req?.user),
       },
     },
   ],
