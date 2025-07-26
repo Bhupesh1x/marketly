@@ -133,12 +133,13 @@ export const productsRouter = createTRPCRouter({
             ...product,
             totalRatings: reviews.totalDocs,
             ratings:
-              reviews.totalDocs === 0
-                ? 0
-                : reviews?.docs?.reduce(
-                    (acc, review) => acc + review.ratings,
+              reviews?.totalDocs > 0
+                ? reviews?.docs?.reduce(
+                    (acc, review) =>
+                      (acc + review.ratings) / reviews?.totalDocs,
                     0
-                  ) / reviews?.totalDocs,
+                  )
+                : 0,
           };
         })
       );
@@ -208,9 +209,57 @@ export const productsRouter = createTRPCRouter({
         isPurchased = !!ordersData?.totalDocs;
       }
 
+      const reviews = await ctx.payload.find({
+        collection: "reviews",
+        pagination: false,
+        where: {
+          product: {
+            equals: product.id,
+          },
+        },
+      });
+
+      const reviewRating =
+        reviews?.totalDocs > 0
+          ? reviews?.docs?.reduce(
+              (acc, review) => (acc + review.ratings) / reviews?.totalDocs,
+              0
+            )
+          : 0;
+
+      const reviewDistribution: Record<number, number> = {
+        5: 0,
+        4: 0,
+        3: 0,
+        2: 0,
+        1: 0,
+      };
+
+      if (reviews?.totalDocs > 0) {
+        reviews?.docs.forEach((review) => {
+          const rating = review?.ratings;
+
+          if (rating >= 1 && rating <= 5) {
+            reviewDistribution[rating] = (reviewDistribution[rating] ?? 0) + 1;
+          }
+        });
+
+        Object.keys(reviewDistribution)?.forEach((key) => {
+          const rating = Number(key);
+          const count = reviewDistribution[rating] || 0;
+
+          reviewDistribution[rating] = Math.round(
+            (count / reviews?.totalDocs) * 100
+          );
+        });
+      }
+
       return {
         ...product,
         isPurchased,
+        reviewRating,
+        reviewCount: reviews?.totalDocs,
+        reviewDistribution,
         image: product?.image as Media | null,
         tenant: product?.tenant as Tenant & { image: Media | null },
       };
