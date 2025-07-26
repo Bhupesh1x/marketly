@@ -115,6 +115,9 @@ export const productsRouter = createTRPCRouter({
         sort,
         page: input.cursor,
         limit: input.limit,
+        select: {
+          content: false,
+        },
       });
 
       const allProductIds = products?.docs?.map((product) => product.id) || [];
@@ -190,6 +193,9 @@ export const productsRouter = createTRPCRouter({
         pagination: false,
         depth: 2, // tenants, tenants.image, image
         limit: 1,
+        select: {
+          content: false,
+        },
       });
 
       const product = productData?.docs?.[0];
