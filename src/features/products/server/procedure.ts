@@ -117,9 +117,35 @@ export const productsRouter = createTRPCRouter({
         limit: input.limit,
       });
 
+      const productsWithSumarrizedReviews = await Promise.all(
+        products?.docs?.map(async (product) => {
+          const reviews = await ctx.payload.find({
+            collection: "reviews",
+            pagination: false,
+            where: {
+              product: {
+                equals: product.id,
+              },
+            },
+          });
+
+          return {
+            ...product,
+            totalRatings: reviews.totalDocs,
+            ratings:
+              reviews.totalDocs === 0
+                ? 0
+                : reviews?.docs?.reduce(
+                    (acc, review) => acc + review.ratings,
+                    0
+                  ) / reviews?.totalDocs,
+          };
+        })
+      );
+
       return {
         ...products,
-        docs: products?.docs?.map((doc) => ({
+        docs: productsWithSumarrizedReviews?.map((doc) => ({
           ...doc,
           image: doc?.image as Media | null,
           tenant: doc?.tenant as Tenant & { image: Media | null },
