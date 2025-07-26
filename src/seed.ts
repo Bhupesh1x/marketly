@@ -1,6 +1,8 @@
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+import { stripe } from "./lib/stripe";
+
 // Defined an array of categories, each with optional subcategories and color
 const categories = [
   {
@@ -142,12 +144,14 @@ const categories = [
 const seed = async () => {
   const payload = await getPayload({ config }); // Initialize Payload with the given config
 
+  const account = await stripe.accounts.create({});
+
   const tenant = await payload.create({
     collection: "tenants",
     data: {
       name: "admin",
       slug: "admin",
-      stripeAccountId: "admin",
+      stripeAccountId: account?.id || "admin",
     },
   });
   // Create admin user
