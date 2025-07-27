@@ -5,6 +5,9 @@ import { isSuperAdmin } from "@/lib/access";
 
 export const Products: CollectionConfig = {
   slug: "products",
+  admin: {
+    description: "You must verify your account before creating products",
+  },
   access: {
     create: ({ req }) => {
       if (isSuperAdmin(req.user)) return true;
