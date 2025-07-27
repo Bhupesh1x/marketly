@@ -157,3 +157,11 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
     </div>
   );
 }
+
+export function ProductIdViewSkeleton() {
+  return (
+    <div className="px-4 lg:px-12 py-10 w-full">
+      <div className="border bg-white animate-pulse h-[1070px] w-full rounded-sm" />
+    </div>
+  );
+}
