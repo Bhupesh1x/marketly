@@ -244,6 +244,10 @@ export interface Product {
    * Check this, if you want to hide this product
    */
   isArchived?: boolean | null;
+  /**
+   * If checked, this product will be not shown on the public storefront
+   */
+  isPrivate?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -441,6 +445,7 @@ export interface ProductsSelect<T extends boolean = true> {
   tags?: T;
   content?: T;
   isArchived?: T;
+  isPrivate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
