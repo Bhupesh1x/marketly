@@ -64,6 +64,9 @@ export async function POST(req: Request) {
             data.id,
             {
               expand: ["line_items.data.price.product"],
+            },
+            {
+              stripeAccount: event.account,
             }
           );
 
@@ -82,6 +85,7 @@ export async function POST(req: Request) {
                 user: user.id,
                 product: item.price.product.metadata.id,
                 name: item.price.product.name,
+                stripeAccountId: event?.account,
               },
             });
           });

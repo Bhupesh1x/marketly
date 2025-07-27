@@ -10,6 +10,7 @@ import {
   protectedProcedure,
 } from "@/trpc/init";
 import { stripe } from "@/lib/stripe";
+import { PLATFORM_FEE_PERCENT } from "@/constants";
 
 export const checkoutRouter = createTRPCRouter({
   getProducts: baseProcedure
@@ -79,6 +80,13 @@ export const checkoutRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "Tenant not found" });
       }
 
+      if (!tenant?.stripeDetailsSubmitted) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Tenant is not allowed to sell products",
+        });
+      }
+
       const products = await ctx.payload.find({
         collection: "products",
         depth: 2,
@@ -124,19 +132,36 @@ export const checkoutRouter = createTRPCRouter({
           },
         }));
 
-      const checkout = await stripe.checkout.sessions.create({
-        customer_email: ctx.session.user.email,
-        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenant.slug}/checkout?success=true`,
-        cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenant.slug}/checkout?cancel=true`,
-        line_items: lineItems,
-        mode: "payment",
-        invoice_creation: {
-          enabled: true,
+      const totalAmount = products?.docs?.reduce(
+        (acc, product) => acc + (product?.price ?? 0) * 100,
+        0
+      );
+
+      const platformFeeAmount = Math.round(
+        totalAmount * (PLATFORM_FEE_PERCENT / 100)
+      );
+
+      const checkout = await stripe.checkout.sessions.create(
+        {
+          customer_email: ctx.session.user.email,
+          success_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenant.slug}/checkout?success=true`,
+          cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/tenants/${tenant.slug}/checkout?cancel=true`,
+          line_items: lineItems,
+          mode: "payment",
+          invoice_creation: {
+            enabled: true,
+          },
+          metadata: {
+            userId: ctx.session.user.id,
+          },
+          payment_intent_data: {
+            application_fee_amount: platformFeeAmount,
+          },
         },
-        metadata: {
-          userId: ctx.session.user.id,
-        },
-      });
+        {
+          stripeAccount: tenant?.stripeAccountId,
+        }
+      );
 
       if (!checkout?.url) {
         throw new TRPCError({
