@@ -147,4 +147,42 @@ export const checkoutRouter = createTRPCRouter({
 
       return { url: checkout.url };
     }),
+  verify: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.payload.findByID({
+      collection: "users",
+      id: ctx.session.user.id,
+      depth: 0,
+    });
+
+    if (!user) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+    }
+
+    const tenantId = user?.tenants?.[0]?.tenant as string; // This will be string because we used depth: 0
+
+    const tenant = await ctx.payload.findByID({
+      collection: "tenants",
+      id: tenantId,
+    });
+
+    if (!tenant) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "Tenant not found" });
+    }
+
+    const account = await stripe.accountLinks.create({
+      account: tenant.stripeAccountId,
+      type: "account_onboarding",
+      refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/admin`,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/admin`,
+    });
+
+    if (!account?.url) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to create account verification link",
+      });
+    }
+
+    return { url: account.url };
+  }),
 });
