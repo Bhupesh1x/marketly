@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeftIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 import { useTRPC } from "@/trpc/client";
 
@@ -47,7 +48,7 @@ export function ProductIdView({ productId }: Props) {
 
           <div className="lg:col-span-5">
             {data?.content ? (
-              <p>{data?.content}</p>
+              <RichText data={data?.content} />
             ) : (
               <p className="font-medium italic text-muted-foreground">
                 No special content

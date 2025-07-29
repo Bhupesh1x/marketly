@@ -100,7 +100,9 @@ export function ReviewForm({ initialData, productId }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <h1 className="font-medium">Your rating:</h1>
+        <h1 className="font-medium">
+          {isPreview ? "Your rating:" : "Liked it? Give it a rating"}
+        </h1>
 
         <FormField
           name="ratings"

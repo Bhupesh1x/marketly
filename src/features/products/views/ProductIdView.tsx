@@ -7,6 +7,7 @@ import { Fragment } from "react";
 import dynamic from "next/dynamic";
 import { LinkIcon, StarIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 import { useTRPC } from "@/trpc/client";
 import { formatPrice, generateTenantUrl } from "@/lib/utils";
@@ -103,7 +104,13 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                 </p>
               </div>
             </div>
-            <div className="p-4 border-t">{product?.description || ""}</div>
+            <div className="p-4 border-t">
+              {product?.description ? (
+                <RichText data={product?.description} />
+              ) : (
+                <p>No description provided</p>
+              )}
+            </div>
           </div>
           {/* Right Rection */}
           <div className="lg:w-[35%] border-t lg:border-none">
@@ -161,7 +168,16 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
 export function ProductIdViewSkeleton() {
   return (
     <div className="px-4 lg:px-12 py-10 w-full">
-      <div className="border bg-white animate-pulse h-[1070px] w-full rounded-sm" />
+      <div className="border bg-white animate-pulse h-[800px] w-full rounded-sm">
+        <div className="relative border-b aspect-video max-h-[450px] w-full">
+          <Image
+            fill
+            src="/images/placeholder.png"
+            alt="product image"
+            className="object-cover"
+          />
+        </div>
+      </div>
     </div>
   );
 }
