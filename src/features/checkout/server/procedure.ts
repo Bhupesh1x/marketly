@@ -135,7 +135,6 @@ export const checkoutRouter = createTRPCRouter({
             currency: "inr",
             product_data: {
               name: product?.name,
-              description: product?.description || " ",
               metadata: {
                 id: product.id,
                 name: product.name,

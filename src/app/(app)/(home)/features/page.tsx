@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 function FeaturesPage() {
   return (
     <div className="px-4">

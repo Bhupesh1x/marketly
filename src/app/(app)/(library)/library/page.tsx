@@ -6,6 +6,8 @@ import { caller, getQueryClient, trpc } from "@/trpc/server";
 
 import { LibraryView } from "@/features/library/views/LibraryView";
 
+export const dynamic = "force-dynamic";
+
 async function LibraryPage() {
   const session = await caller.auth.session();
 
