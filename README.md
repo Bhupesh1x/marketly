@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marketly
 
-## Getting Started
+**Marketly** is a fully-featured, multi-tenant digital marketplace with **complete e-commerce functionalities**, built for creators and entrepreneurs to sell their digital products effortlessly.
 
-First, run the development server:
+This modern platform is built using **Next.js 15**, **Payload CMS**, and **Stripe Connect**, and is fully responsive across devices. Marketly delivers a seamless, scalable experience for both merchants and customers. Whether you're a developer looking to study a production-grade e-commerce system or a seller wanting to launch your digital storefront, Marketly offers a powerful foundation that follows industry best practices.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Multi-Tenant Architecture**  
+  Each merchant gets their own storefront with isolated products and settings.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Stripe Connect Integration**  
+  Secure merchant onboarding with automatic revenue sharing and platform fees.
 
-## Learn More
+- **Admin & Merchant Dashboards**  
+  Interfaces for platform admins and individual merchants.
 
-To learn more about Next.js, take a look at the following resources:
+- **Payload CMS Backend**  
+  Powerful content management system for managing products, categories, and site content.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **User Purchase Library**  
+  Buyers can access their previously purchased digital products at any time.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Product Ratings & Reviews**  
+  Allow users to provide feedback and improve product credibility.
 
-## Deploy on Vercel
+- **Category Filtering & Search**  
+  Helps users find the right product faster.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Role-Based Access Control (RBAC)**  
+  Secure access management for admins, merchants, and customers.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Image Upload Support**  
+  Upload product images via Payload CMS.
+
+- **Tailwind CSS v4**  
+  Fully responsive, modern UI built with utility-first styling.
+
+---
+
+---
+
+## 📸 Screenshots
+
+> **Storefront**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979304/marketly-app.vercel.app_homepage_wcyyxy.png" alt="" />
+<br />
+
+> **Product Detail**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979303/marketly-app.vercel.app_product_detail_page_kucofj.png" alt="" />
+
+> **Tenant Page**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979304/marketly-app.vercel.app_tenant_jmpkpq.png" alt="" />
+
+> **Checkout**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979574/marketly-app.vercel.app_tenant_checkout_pq8jfj.png" alt="" />
+
+> **Library View**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979304/marketly-app.vercel.app_library_ulmy5l.png" alt="" />
+
+> **Review Page**
+
+<img src="https://res.cloudinary.com/doqvdfvrj/image/upload/v1753979302/marketly-app.vercel.app_review_form_zfdhgj.png" alt="" />
+
+---
