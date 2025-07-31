@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 
 import { useTRPC } from "@/trpc/client";
+
+import { useProductFilters } from "@/features/products/hooks/useProductFilters";
 
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -17,7 +19,17 @@ interface Props {
 }
 
 export function SearchInput({ disabled }: Props) {
+  const [filters, setFilters] = useProductFilters();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState(filters?.search || "");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters({ search: searchValue });
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchValue]);
 
   const trpc = useTRPC();
   const { data: session, isLoading } = useQuery(
@@ -33,6 +45,8 @@ export function SearchInput({ disabled }: Props) {
           placeholder="Search products"
           className="pl-8"
           disabled={disabled}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
       <Button

@@ -15,6 +15,7 @@ export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
       z.object({
+        search: z.string().optional().nullable(),
         category: z.string().optional().nullable(),
         minPrice: z.string().nullable().optional(),
         maxPrice: z.string().nullable().optional(),
@@ -115,6 +116,12 @@ export const productsRouter = createTRPCRouter({
       if (input?.tags?.length) {
         where["tags.name"] = {
           in: input.tags,
+        };
+      }
+
+      if (input?.search) {
+        where["name"] = {
+          like: input.search,
         };
       }
 
