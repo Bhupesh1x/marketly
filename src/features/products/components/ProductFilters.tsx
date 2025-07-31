@@ -69,3 +69,9 @@ export function ProductFilters() {
     </div>
   );
 }
+
+export function ProductFiltersSkeleton() {
+  return (
+    <div className="border rounded-md bg-neutral-200 animate-pulse h-[148px]" />
+  );
+}
