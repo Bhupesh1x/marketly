@@ -63,7 +63,7 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
             fill
             src={product?.image?.url || "/images/placeholder.png"}
             alt={product?.name}
-            className="object-cover"
+            className="object-contain bg-white"
           />
         </div>
         {/* Container */}
@@ -71,7 +71,12 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
           {/* Left */}
           <div className="lg:w-[65%] lg:border-r">
             <div className="p-4">
-              <h1 className="text-2xl font-medium">{product?.name || ""}</h1>
+              <h1
+                className="text-2xl font-medium line-clamp-2"
+                title={product?.name || ""}
+              >
+                {product?.name || ""}
+              </h1>
             </div>
             <div className="border-t flex flex-col lg:flex-row">
               <div className="flex">
@@ -92,7 +97,9 @@ export function ProductIdView({ productId, tenantSlug }: Props) {
                         className="rounded-full"
                       />
                     )}
-                    <p className="underline">{product?.tenant?.name || ""}</p>
+                    <p className="underline line-clamp-2">
+                      {product?.tenant?.name || ""}
+                    </p>
                   </Link>
                 </div>
               </div>

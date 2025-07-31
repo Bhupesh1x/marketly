@@ -8,9 +8,6 @@ export const Media: CollectionConfig = {
     read: () => true,
     update: ({ req }) => isSuperAdmin(req?.user),
   },
-  admin: {
-    hidden: ({ user }) => !isSuperAdmin(user),
-  },
   fields: [
     {
       name: "alt",

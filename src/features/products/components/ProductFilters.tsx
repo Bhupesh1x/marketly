@@ -15,6 +15,7 @@ export function ProductFilters() {
 
   function onClear() {
     setFilters({
+      search: "",
       maxPrice: "",
       minPrice: "",
       tags: [],

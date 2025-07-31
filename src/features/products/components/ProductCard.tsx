@@ -48,18 +48,23 @@ export function ProductCard({
       }
     >
       <div
-        className={`border rounded-md py-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow`}
+        className={`border rounded-md hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow`}
       >
         <div className="relative aspect-square">
           <Image
             fill
             src={imageUrl || "/images/placeholder.png"}
             alt={name}
-            className="object-cover"
+            className="object-cover rounded-t-md"
           />
         </div>
         <div className={`p-4 space-y-2 ${isLibrary ? "border-t" : "border-y"}`}>
-          <p className="text-lg font-medium">{name}</p>
+          <p
+            className="text-lg font-medium line-clamp-2 min-h-[56px]"
+            title={name || ""}
+          >
+            {name}
+          </p>
           <div className="flex items-center gap-1">
             {!!tenantImageUrl && (
               <Image
