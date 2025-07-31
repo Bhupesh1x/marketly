@@ -48,7 +48,12 @@ export function ProductIdView({ productId }: Props) {
 
           <div className="lg:col-span-5">
             {data?.content ? (
-              <RichText data={data?.content} />
+              <div className="space-y-2">
+                <p className="font-medium italic text-muted-foreground">
+                  Special content from seller
+                </p>
+                <RichText data={data?.content} />
+              </div>
             ) : (
               <p className="font-medium italic text-muted-foreground">
                 No special content

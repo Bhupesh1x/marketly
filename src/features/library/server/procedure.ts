@@ -76,14 +76,14 @@ export const libraryRouter = createTRPCRouter({
           reviewCount === 0
             ? 0
             : productReviews?.reduce(
-                (acc, product) => (acc + (product.ratings ?? 0)) / reviewCount,
+                (acc, product) => acc + (product.ratings ?? 0),
                 0
-              );
+              ) / reviewCount;
 
         return {
           ...doc,
           reviewCount,
-          reviewRating,
+          reviewRating: Math.round(reviewRating ?? 0),
         };
       });
       return {

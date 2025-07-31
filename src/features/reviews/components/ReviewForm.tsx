@@ -34,7 +34,7 @@ export function ReviewForm({ initialData, productId }: Props) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const [isPreview, setIsPreview] = useState(true);
+  const [isPreview, setIsPreview] = useState(!!initialData);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,7 +59,7 @@ export function ReviewForm({ initialData, productId }: Props) {
           onSuccess: () => {
             toast.success("Review added");
             queryClient.invalidateQueries(
-              trpc.reviews.getOne.queryFilter({
+              trpc.reviews.getOne.queryOptions({
                 productId,
               })
             );

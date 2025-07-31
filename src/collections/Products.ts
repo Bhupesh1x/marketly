@@ -6,7 +6,8 @@ import { isSuperAdmin } from "@/lib/access";
 export const Products: CollectionConfig = {
   slug: "products",
   admin: {
-    description: "You must verify your account before creating products",
+    description:
+      "You must verify your account before creating products To do this, click the Verify Account button located at the top of the sidebar. This will take you to the Stripe verification page, where you can verify your business. Once verification is complete, you’ll be able to start creating products.",
   },
   access: {
     create: ({ req }) => {

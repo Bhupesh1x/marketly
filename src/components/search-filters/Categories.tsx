@@ -85,7 +85,7 @@ export function Categories() {
 
       <div
         ref={containerRef}
-        className="flex flex-nowrap items-center"
+        className="flex flex-nowrap items-center overflow-hidden"
         onMouseEnter={() => setIsAnyHovered(true)}
         onMouseLeave={() => setIsAnyHovered(false)}
       >

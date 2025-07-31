@@ -219,7 +219,7 @@ export interface Category {
   createdAt: string;
 }
 /**
- * You must verify your account before creating products
+ * You must verify your account before creating products To do this, click the Verify Account button located at the top of the sidebar. This will take you to the Stripe verification page, where you can verify your business. Once verification is complete, you’ll be able to start creating products.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".

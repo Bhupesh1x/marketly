@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/trpc/client";
+import { GUEST_CREDENTIALS } from "@/constants";
 
 import {
   Form,
@@ -59,6 +60,11 @@ export function SignInView() {
     });
   }
 
+  function handleFillGuestCredentails() {
+    form.setValue("email", GUEST_CREDENTIALS.email);
+    form.setValue("password", GUEST_CREDENTIALS.password);
+  }
+
   return (
     <div className="h-screen w-full grid grid-cols-1 lg:grid-cols-5">
       <div className="h-full w-full col-span-1 lg:col-span-3 bg-[#F4F4F0] p-4 lg:p-16">
@@ -90,19 +96,31 @@ export function SignInView() {
                 </FormItem>
               )}
             />
-            <FormField
-              name="password"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" placeholder="******" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                name="password"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">Password</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password" placeholder="******" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-end justify-end mt-2">
+                <button
+                  onClick={handleFillGuestCredentails}
+                  type="button"
+                  className="text-sm font-medium underline border-none h-fit cursor-pointer"
+                >
+                  Use guest credentials
+                </button>
+              </div>
+            </div>
 
             <Button
               disabled={login.isPending}
