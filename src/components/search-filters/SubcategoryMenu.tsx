@@ -27,6 +27,7 @@ export function SubcategoryMenu({ category, isOpen }: Props) {
         <div>
           {category?.subcategories?.map((subcategory) => (
             <Link
+              prefetch
               key={subcategory.slug}
               href={`/${category?.slug}/${subcategory?.slug}`}
               className="w-full p-2 text-left flex items-center justify-between hover:underline font-medium hover:bg-black hover:text-white  transition"

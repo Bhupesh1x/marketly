@@ -41,6 +41,7 @@ export function ProductCard({
 
   return (
     <Link
+      prefetch
       href={
         isLibrary
           ? `/library/${id}`
